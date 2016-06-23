@@ -1,0 +1,4 @@
+test:
+  VAR: 'foo'
+  SUM: <%= 1 + 1 %>
+  FOO:
