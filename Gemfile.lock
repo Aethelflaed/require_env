@@ -1,0 +1,19 @@
+PATH
+  remote: .
+  specs:
+    require_env (1.0.0)
+      safe_yaml (~> 1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    safe_yaml (1.0.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  require_env!
+
+BUNDLED WITH
+   1.12.5
