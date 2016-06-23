@@ -1,19 +1,16 @@
-# Configure Rails Environment
-ENV["RAILS_ENV"] = "test"
+require 'bundler/setup'
+require 'simplecov'
+SimpleCov.configure do
+  add_filter '/test/'
+end
+SimpleCov.start if ENV['COVERAGE']
 
-require File.expand_path("../../test/dummy/config/environment.rb",  __FILE__)
-require "rails/test_help"
+require 'active_support'
+require 'minitest/autorun'
 
-# Filter out Minitest backtrace while allowing backtrace from other libraries
-# to be shown.
-Minitest.backtrace_filter = Minitest::BacktraceFilter.new
+require 'require_env'
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-# Load fixtures from the engine
-if ActiveSupport::TestCase.respond_to?(:fixture_path=)
-  ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures", __FILE__)
-  ActionDispatch::IntegrationTest.fixture_path = ActiveSupport::TestCase.fixture_path
-  ActiveSupport::TestCase.fixtures :all
-end
+ActiveSupport::TestCase.test_order = :random
