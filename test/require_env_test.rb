@@ -17,6 +17,7 @@ class RequireEnvTest < ActiveSupport::TestCase
   test 'check' do
     file = File.expand_path('../test.yml', __FILE__)
 
+    RequireEnv.application_environment = nil
     assert_raise(ArgumentError) do
       RequireEnv.check(file, file)
     end
@@ -31,13 +32,14 @@ class RequireEnvTest < ActiveSupport::TestCase
   end
 
   test 'application_environment' do
-    assert_equal nil, RequireEnv.application_environment
-
     ENV['RAILS_ENV'] = 'test'
     assert_equal 'test', RequireEnv.application_environment
 
     ENV['RAILS_ENV'] = 'foo'
-    assert_equal 'foo', RequireEnv.application_environment
+    assert_equal 'test', RequireEnv.application_environment
+
+    RequireEnv.application_environment = 'whatever'
+    assert_equal 'whatever', RequireEnv.application_environment
   end
 
   test 'requirements_from_file' do

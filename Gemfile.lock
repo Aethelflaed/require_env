@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    require_env (1.0.0)
+    require_env (1.1.0)
       safe_yaml (~> 1.0)
 
 GEM

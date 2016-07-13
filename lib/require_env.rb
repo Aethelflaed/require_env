@@ -52,6 +52,10 @@ module RequireEnv
   end
 
   def self.application_environment
-    ENV['RAILS_ENV']
+    @application_environment ||= ENV['RAILS_ENV']
+  end
+
+  def self.application_environment=(value)
+    @application_environment = value
   end
 end
