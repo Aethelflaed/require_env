@@ -10,6 +10,10 @@ class RequireEnvTest < ActiveSupport::TestCase
     ENV.delete('BAZ')
   end
 
+  teardown do
+    RequireEnv.fallback_environment = nil
+  end
+
   test 'truth' do
     assert_kind_of Module, RequireEnv
   end
@@ -42,6 +46,21 @@ class RequireEnvTest < ActiveSupport::TestCase
     assert_equal 'whatever', RequireEnv.application_environment
   end
 
+  test 'fallback_environment' do
+    file = File.expand_path('../test.yml', __FILE__)
+    ENV['FOO'] = 'bar'
+    RequireEnv.application_environment = 'check'
+
+    assert_raise(ArgumentError) do
+      RequireEnv.check(file, file)
+    end
+
+    RequireEnv.fallback_environment = 'test'
+    assert_nothing_raised do
+      RequireEnv.check(file, file)
+    end
+  end
+
   test 'requirements_from_file' do
     assert_raise(ArgumentError) do
       RequireEnv.requirements_from_file('foobar')
@@ -53,7 +72,7 @@ class RequireEnvTest < ActiveSupport::TestCase
     assert_kind_of Hash, result
     assert_equal 'foo', result.dig('test', 'VAR')
     assert_equal 2, result.dig('test', 'SUM')
-    assert_equal nil, result.dig('test', 'FOO')
+    assert_nil result.dig('test', 'FOO')
   end
 
   test 'check_requirements' do

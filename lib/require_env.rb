@@ -5,11 +5,12 @@ require 'erb'
 module RequireEnv
   def self.check(*files)
     check_multiple_requirements(files.map do |file|
-      requirements = requirements_from_file(file)[application_environment]
-      if requirements.nil?
+      requirements = requirements_from_file(file)
+      env_requirements = requirements[application_environment] || requirements[fallback_environment]
+      if env_requirements.nil?
         raise ArgumentError.new("#{file} does not define anything for environment: #{application_environment}")
       end
-      [file, requirements]
+      [file, env_requirements]
     end)
   end
 
@@ -57,5 +58,12 @@ module RequireEnv
 
   def self.application_environment=(value)
     @application_environment = value
+  end
+
+  def self.fallback_environment
+    @fallback_environment ||= nil
+  end
+  def self.fallback_environment=(value)
+    @fallback_environment = value
   end
 end
